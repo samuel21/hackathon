@@ -2,6 +2,7 @@ import logo from './logo.svg';
 // import D from './istockphoto-1125625274-612x612.jpg';
 import './App.css';
 import Navbar from './components/navbar'; // Import the Navbar component
+import MyCalendar from './components/calendar';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <MyCalendar/>
     </div>
   );
 }
