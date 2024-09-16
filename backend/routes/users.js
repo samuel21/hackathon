@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('HackScheduler.db');
 
@@ -10,6 +11,36 @@ router.get('/', (req, res) => {
 });
 */
 
+// Middleware to parse JSON
+router.use(express.json());
+
+// Route to create a new user
+router.post('/', (req, res) => {
+    const { name, email, password, gender, age, married, kids, occupation, location } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(400).send('Name, email, and password are required');
+    }
+
+    // Hash the password
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+        if (err) {
+            return res.status(500).send('Error hashing password');
+        }
+
+        // Insert the user into the database
+        db.run(`INSERT INTO Users (name, email, password_hash, gender, age, married, kids, occupation, location)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [name, email, hashedPassword, gender, age, married, kids, occupation, location],
+            function(err) {
+                if (err) {
+                    return res.status(500).send('Error creating user');
+                }
+                res.status(201).json({ user_id: this.lastID, message: 'User created successfully' });
+            });
+    });
+});
+/*
 // Create a new user
 router.post('/', (req, res) => {
     const { name, email, password_hash, gender, age, married, kids, occupation, location, role } = req.body;
@@ -21,6 +52,7 @@ router.post('/', (req, res) => {
         res.status(201).json({ user_id: this.lastID });
     });
 });
+*/
 
 // Get all users
 router.get('/', (req, res) => {
