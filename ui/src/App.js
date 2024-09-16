@@ -3,6 +3,8 @@ import './App.css';
 import Navbar from './components/navbar';
 import Questionnaire from './components/questionnarie';
 import React, { useRef } from 'react';
+import Navbar from './components/navbar'; // Import the Navbar component
+import MyCalendar from './components/calendar';
 
 function App() {
   const questionnaireRef = useRef(null);
@@ -28,6 +30,7 @@ function App() {
                 <Questionnaire />
         </section>
       </div>
+      <MyCalendar/>
     </div>
   );
 }
