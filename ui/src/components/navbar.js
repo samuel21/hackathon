@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/navbar.css'; // Assuming you have a CSS file for styling
 
-const Navbar = () => {
+const Navbar = ({ scrollToQuestionnaire }) => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
@@ -15,7 +15,7 @@ const Navbar = () => {
                     <a href="/about" className="nav-link">About</a>
                 </li>
                 <li className="nav-item">
-                    <a href="/questionnaire" className="nav-link">Questionnaire</a>
+                    <a href="#questionnaire" className="nav-link" onClick={scrollToQuestionnaire}>Questionnaire</a>
                 </li>
                 <li className="nav-item">
                     <a href="/calendar" className="nav-link">Calendar</a>

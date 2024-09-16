@@ -2,13 +2,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background-color: #bdd8f5;
     padding: 1rem;
     position: 0;
 }
 
 .navbar-brand a {
-    color: #fff;
+    color: #4c85f7;
     text-decoration: none;
     font-size: 1.5rem;
 }
@@ -25,7 +25,7 @@
 }
 
 .nav-link {
-    color: #fff;
+    color: #4c85f7;
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease;
