@@ -2,35 +2,34 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #bdd8f5;
-    padding: 1rem;
-    position: 0;
+    background-color: #333;
+    /* padding: 1rem; */
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 
 .navbar-brand a {
-    color: #4c85f7;
+    color: rgb(230, 227, 227);
     text-decoration: none;
     font-size: 1.5rem;
 }
 
-.navbar-nav {
-    list-style: none;
+.navbar-brand a:hover {
+    color: #908f8f;
+}
+.nav-group {
+    align-items: right;
     display: flex;
-    margin: 0;
-    padding: 0;
 }
 
-.nav-item {
-    margin-left: 1.5rem;
-}
-
-.nav-link {
-    color: #4c85f7;
+.nav-item a {
+    color: rgb(230, 227, 227);
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
 
-.nav-link:hover {
-    color: #ddd;
+.nav-item a:hover {
+    color: #908f8f;
 }
