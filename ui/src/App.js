@@ -1,28 +1,40 @@
 import logo from './logo.svg';
-// import D from './istockphoto-1125625274-612x612.jpg';
 import './App.css';
-import Navbar from './components/navbar'; // Import the Navbar component
+import Navbar from './components/navbar';
+import Questionnaire from './components/questionnarie';
+import React, { useRef } from 'react';// Import the Navbar component
 import MyCalendar from './components/calendar';
+import CheckInApp from './components/checkin';
 
 function App() {
   return (
     <div className="App">
-      <header>
-        <Navbar /> {/* Add the Navbar component here */}
+      <Navbar /> 
+      <div className='Body'>
+        <div className='About'>
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to Stark Tech. Yes we work with Spiderman
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <MyCalendar/>
+          <p>
+            Welcome to Stark Tech. Yes we work with Spiderman
+          </p>
+        </div>
+        <div className='Questionnaire'>
+          <section id="questionnaire">
+            <Questionnaire />
+          </section>
+        </div>
+        <div className='Calendar'>
+          <section id="calendar">
+            <MyCalendar/>
+          </section>
+        </div>
+        <div className='Contact'>
+          <section id="contact">
+          </section>
+        </div>
+      </div>
+      {/* <Modal> */}
+      <CheckInApp/>
+      {/* </Modal> */}
     </div>
   );
 }

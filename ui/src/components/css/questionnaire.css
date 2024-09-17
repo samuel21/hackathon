@@ -1,0 +1,31 @@
+.Button {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: brown;
+}
+
+.group {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    padding: 10px;
+}
+
+.group label {
+    width: 20%;
+    font-size: larger;
+    color: brown;
+}
+
+.group input {
+    font-size: larger;
+    color: brown;
+}
+
+.Form {
+    border: 1px solid bisque;
+    border-radius: 10px;
+    background-color: bisque;
+}
