@@ -3,6 +3,8 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "express": "^4.21.0",
+    "ical": "^0.8.0",
+    "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.7"
   }
 }
