@@ -89,6 +89,7 @@ db.serialize(() => {
         start_time TEXT NOT NULL,  -- Task start time (stored as TEXT)
         end_time TEXT NOT NULL,    -- Task end time (stored as TEXT)
         status TEXT CHECK(status IN ('completed', 'partial', 'pending')) DEFAULT 'pending',  -- Task status
+        source TEXT CHECK(source IN ('openai', 'ics')) DEFAULT 'openai',
         FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
     )`, (err) => {
             if (err) {

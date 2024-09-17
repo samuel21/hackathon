@@ -22,8 +22,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
     const insertPromises = events.map(event => {
       return new Promise((resolve, reject) => {
         const query = `
-          INSERT INTO Schedules (user_id, name, description, due_date, category, priority, labels, start_time, end_time, status)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO Schedules (user_id, name, description, due_date, category, priority, labels, start_time, end_time, status, source)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const params = [
           1, // Replace with actual user_id if needed
@@ -35,7 +35,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
           event.labels,
           event.start_time,
           event.end_time,
-          event.status
+          event.status,
+          event.
         ];
 
         db.run(query, params, function (err) {
