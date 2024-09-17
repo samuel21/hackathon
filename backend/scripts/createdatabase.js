@@ -78,15 +78,19 @@ db.serialize(() => {
     // Create Schedules table
     db.run(`
         CREATE TABLE IF NOT EXISTS Schedules (
-            schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            task_name TEXT NOT NULL,
-            start_time TEXT NOT NULL,  -- Using TEXT to store DATETIME values
-            end_time TEXT NOT NULL,    -- Using TEXT to store DATETIME values
-            task_type TEXT CHECK(task_type IN ('work', 'learning', 'hobby', 'break', 'sleep')) NOT NULL,
-            status TEXT CHECK(status IN ('completed', 'partial', 'pending')) DEFAULT 'pending',
-            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
+        schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        name TEXT NOT NULL,  -- Task name
+        description TEXT,  -- Task description
+        due_date TEXT,  -- Due date of the task (stored as TEXT in ISO format)
+        category TEXT CHECK(category IN ('work', 'learning', 'hobby', 'break', 'sleep')) NOT NULL,  -- Category of the task
+        priority TEXT CHECK(priority IN ('low', 'medium', 'high')) DEFAULT 'medium',  -- Task priority
+        labels TEXT,  -- A comma-separated list of labels/tags
+        start_time TEXT NOT NULL,  -- Task start time (stored as TEXT)
+        end_time TEXT NOT NULL,    -- Task end time (stored as TEXT)
+        status TEXT CHECK(status IN ('completed', 'partial', 'pending')) DEFAULT 'pending',  -- Task status
+        FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+    )`, (err) => {
             if (err) {
                 console.error("Error creating Schedules table:", err.message);
             } else {

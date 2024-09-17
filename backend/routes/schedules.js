@@ -1,52 +1,90 @@
+// schedules.js
+
 const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('HackScheduler.db');
 
-/*
-router.get('/', (req, res) => {
-    res.send('Schedules route working');
-});
-*/
-
 // Create a new schedule
 router.post('/', (req, res) => {
-    const { user_id, task_name, start_time, end_time, task_type, status } = req.body;
-    db.run(`INSERT INTO Schedules (user_id, task_name, start_time, end_time, task_type, status) VALUES (?, ?, ?, ?, ?, ?)`,
-        [user_id, task_name, start_time, end_time, task_type, status],
-        function (err) {
-            if (err) return res.status(500).send(err.message);
-            res.status(201).send({ schedule_id: this.lastID });
-        });
-});
+    const { user_id, name, description, due_date, category, priority, labels, start_time, end_time, status } = req.body;
 
-// Get all schedules for a user
-router.get('/:user_id', (req, res) => {
-    const { user_id } = req.params;
-    db.all(`SELECT * FROM Schedules WHERE user_id = ?`, [user_id], (err, rows) => {
-        if (err) return res.status(500).send(err.message);
-        res.status(200).send(rows);
+    const query = `
+        INSERT INTO Schedules (user_id, name, description, due_date, category, priority, labels, start_time, end_time, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.run(query, [user_id, name, description, due_date, category, priority, labels, start_time, end_time, status || 'pending'], function(err) {
+        if (err) {
+            console.error('Error creating schedule:', err.message);
+            res.status(500).json({ error: err.message });
+        } else {
+            res.status(201).json({ message: 'Schedule created successfully', schedule_id: this.lastID });
+        }
     });
 });
 
-// Update a schedule
-router.put('/:schedule_id', (req, res) => {
-    const { schedule_id } = req.params;
-    const { task_name, start_time, end_time, task_type, status } = req.body;
-    db.run(`UPDATE Schedules SET task_name = ?, start_time = ?, end_time = ?, task_type = ?, status = ? WHERE schedule_id = ?`,
-        [task_name, start_time, end_time, task_type, status, schedule_id],
-        function (err) {
-            if (err) return res.status(500).send(err.message);
-            res.status(200).send({ updated: this.changes });
-        });
+// Get all schedules
+router.get('/', (req, res) => {
+    db.all('SELECT * FROM Schedules', [], (err, rows) => {
+        if (err) {
+            console.error('Error retrieving schedules:', err.message);
+            res.status(500).json({ error: err.message });
+        } else {
+            res.status(200).json(rows);
+        }
+    });
 });
 
-// Delete a schedule
-router.delete('/:schedule_id', (req, res) => {
-    const { schedule_id } = req.params;
-    db.run(`DELETE FROM Schedules WHERE schedule_id = ?`, [schedule_id], function (err) {
-        if (err) return res.status(500).send(err.message);
-        res.status(200).send({ deleted: this.changes });
+// Get a specific schedule by ID
+router.get('/:id', (req, res) => {
+    const scheduleId = req.params.id;
+
+    db.get('SELECT * FROM Schedules WHERE schedule_id = ?', [scheduleId], (err, row) => {
+        if (err) {
+            console.error('Error retrieving schedule:', err.message);
+            res.status(500).json({ error: err.message });
+        } else if (!row) {
+            res.status(404).json({ message: 'Schedule not found' });
+        } else {
+            res.status(200).json(row);
+        }
+    });
+});
+// Update a schedule
+router.put('/:id', (req, res) => {
+    const scheduleId = req.params.id;
+    const { name, description, due_date, category, priority, labels, start_time, end_time, status } = req.body;
+
+    const query = `
+        UPDATE Schedules
+        SET name = ?, description = ?, due_date = ?, category = ?, priority = ?, labels = ?, start_time = ?, end_time = ?, status = ?
+        WHERE schedule_id = ?
+    `;
+
+    db.run(query, [name, description, due_date, category, priority, labels, start_time, end_time, status || 'pending', scheduleId], function(err) {
+        if (err) {
+            console.error('Error updating schedule:', err.message);
+            res.status(500).json({ error: err.message });
+        } else if (this.changes === 0) {
+            res.status(404).json({ message: 'Schedule not found' });
+        } else {
+            res.status(200).json({ message: 'Schedule updated successfully' });
+        }
+    });
+});// Delete a schedule
+router.delete('/:id', (req, res) => {
+    const scheduleId = req.params.id;
+
+    db.run('DELETE FROM Schedules WHERE schedule_id = ?', [scheduleId], function(err) {
+        if (err) {
+            console.error('Error deleting schedule:', err.message);
+            res.status(500).json({ error: err.message });
+        } else if (this.changes === 0) {
+            res.status(404).json({ message: 'Schedule not found' });
+        } else {
+            res.status(200).json({ message: 'Schedule deleted successfully' });
+        }
     });
 });
 
