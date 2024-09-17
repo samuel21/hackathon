@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText, Grid2, Checkbox, Chip, Modal, Box } from "@mui/material";
+import { List, ListItem, ListItemText, Grid2, Checkbox, Chip, Modal, Box, ListItemIcon } from "@mui/material";
+import TodayIcon from '@mui/icons-material/Today';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CheckInTodoList = () => {
@@ -91,7 +93,7 @@ const CheckInTodoList = () => {
     const currentDate = getCurrentDate();
     
     const overdue = tasks.filter((task) => {
-        return task.dueDate < currentDate || (task.dueDate === currentDate && task.dueTime < currentTime);
+        return task.dueDate < currentDate || (task.dueDate === currentDate && task.dueTime < currentTime) && task.status !== "completed";
     });
 
     setOverdueTasks(overdue);
@@ -102,7 +104,7 @@ const CheckInTodoList = () => {
     const currentTime = getCurrentTime();
     const currentDate = getCurrentDate();
     return tasks.filter((task) => {
-      return task.dueTime > currentTime && task.dueDate === currentDate;
+      return task.dueTime > currentTime && task.dueDate === currentDate && task.status !== "completed";
     });
   };
 
@@ -148,7 +150,13 @@ const CheckInTodoList = () => {
                       secondary={task.description}
                       style={{ textDecoration: task.status === "completed" ? "line-through" : "none" }}
                     />
-                    <ListItemText primary={`Due: ${task.dueDate} at ${task.dueTime}`} />
+                    <ListItem style={{justifyContent:"start", marginRight:"10dp"}}>
+                        <TodayIcon/><ListItemText primary={task.dueDate}/>
+                    </ListItem>
+                    <ListItem style={{justifyContent:"start"}}>
+                        <AccessAlarmIcon/> <ListItemText primary={task.dueTime} />
+                    </ListItem>
+                    <ListItem>
                     <Chip label={task.category} color="primary" variant="outlined" />
                     {/* Split the labels by ',' and display each one as a Chip */}
                     {task.labels.split(",").map((label, idx) => (
@@ -159,6 +167,7 @@ const CheckInTodoList = () => {
                         style={{ marginLeft: 4 }}
                       />
                     ))}
+                    </ListItem>
                   </Grid2>
                   <Grid2 item xs={6}>
                     <Chip
@@ -243,7 +252,7 @@ const DesktopNotification = ({ onClick }) => {
       }
   
       // Schedule notifications at 10 AM, 2 PM, and 6 PM
-      const notificationTimes = ["10:00", "14:39", "18:00"];
+      const notificationTimes = ["10:00", "14:00", "18:00"];
   
       const checkNotificationTime = () => {
         const now = new Date();
