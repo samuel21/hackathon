@@ -69,23 +69,23 @@ db.serialize(() => {
 
     // Insert into Schedules table
     db.run(`
-        INSERT INTO Schedules (user_id, name, description, due_date, category, priority, labels, start_time, end_time, status)
+        INSERT INTO Schedules (user_id, name, description, due_date, category, priority, labels, start_time, end_time, status, source)
         VALUES 
-        (1, 'Morning Run', 'Daily morning run', '${tomorrowDate}', 'hobby', 'medium', 'exercise,health', '06:00', '07:00', 'pending'),
-        (2, 'Team Meeting', 'Weekly sync-up meeting', '${tomorrowDate}', 'work', 'high', 'meeting,work', '10:00', '11:00', 'pending'),
-        (1, 'Code Review', 'Review team code submissions', '${tomorrowDate}', 'work', 'high', 'code,review', '11:00', '12:00', 'pending'),
-        (1, 'Lunch Break', 'Lunch with colleagues', '${tomorrowDate}', 'break', 'medium', 'lunch,break', '12:00', '13:00', 'pending'),
-        (1, 'Client Call', 'Call with client to discuss project', '${tomorrowDate}', 'work', 'high', 'call,client', '14:00', '15:00', 'pending'),
-        (1, 'Gym', 'Workout session', '${tomorrowDate}', 'hobby', 'medium', 'workout,health', '18:00', '19:00', 'pending'),
-        (1, 'Dinner', 'Dinner with family', '${tomorrowDate}', 'break', 'medium', 'dinner,family', '20:00', '21:00', 'pending'),
-        (1, 'Reading', 'Read a book', '${tomorrowDate}', 'hobby', 'low', 'reading,relax', '21:00', '22:00', 'pending'),
-        (2, 'Morning Yoga', 'Daily yoga session', '${tomorrowDate}', 'hobby', 'medium', 'yoga,health', '07:00', '08:00', 'pending'),
-        (2, 'Design Workshop', 'Attend design workshop', '${tomorrowDate}', 'learning', 'high', 'workshop,design', '09:00', '11:00', 'pending'),
-        (2, 'Lunch Break', 'Lunch with friends', '${tomorrowDate}', 'break', 'medium', 'lunch,break', '12:00', '13:00', 'pending'),
-        (2, 'Project Work', 'Work on design project', '${tomorrowDate}', 'work', 'high', 'project,design', '13:00', '17:00', 'pending'),
-        (2, 'Evening Run', 'Evening run in the park', '${tomorrowDate}', 'hobby', 'medium', 'run,health', '18:00', '19:00', 'pending'),
-        (2, 'Dinner', 'Dinner with family', '${tomorrowDate}', 'break', 'medium', 'dinner,family', '20:00', '21:00', 'pending'),
-        (2, 'Painting', 'Work on painting', '${tomorrowDate}', 'hobby', 'low', 'painting,relax', '21:00', '22:00', 'pending')
+        (1, 'Morning Run', 'Daily morning run', '${tomorrowDate}', 'hobby', 'medium', 'exercise,health', '06:00', '07:00', 'pending', 'openai'),
+        (2, 'Team Meeting', 'Weekly sync-up meeting', '${tomorrowDate}', 'work', 'high', 'meeting,work', '10:00', '11:00', 'pending', 'openai'),
+        (1, 'Code Review', 'Review team code submissions', '${tomorrowDate}', 'work', 'high', 'code,review', '11:00', '12:00', 'pending', 'openai'),
+        (1, 'Lunch Break', 'Lunch with colleagues', '${tomorrowDate}', 'break', 'medium', 'lunch,break', '12:00', '13:00', 'pending', 'openai'),
+        (1, 'Client Call', 'Call with client to discuss project', '${tomorrowDate}', 'work', 'high', 'call,client', '14:00', '15:00', 'pending', 'openai'),
+        (1, 'Gym', 'Workout session', '${tomorrowDate}', 'hobby', 'medium', 'workout,health', '18:00', '19:00', 'pending', 'openai'),
+        (1, 'Dinner', 'Dinner with family', '${tomorrowDate}', 'break', 'medium', 'dinner,family', '20:00', '21:00', 'pending', 'openai'),
+        (1, 'Reading', 'Read a book', '${tomorrowDate}', 'hobby', 'low', 'reading,relax', '21:00', '22:00', 'pending', 'openai'),
+        (2, 'Morning Yoga', 'Daily yoga session', '${tomorrowDate}', 'hobby', 'medium', 'yoga,health', '07:00', '08:00', 'pending', 'openai'),
+        (2, 'Design Workshop', 'Attend design workshop', '${tomorrowDate}', 'learning', 'high', 'workshop,design', '09:00', '11:00', 'pending', 'openai'),
+        (2, 'Lunch Break', 'Lunch with friends', '${tomorrowDate}', 'break', 'medium', 'lunch,break', '12:00', '13:00', 'pending', 'openai'),
+        (2, 'Project Work', 'Work on design project', '${tomorrowDate}', 'work', 'high', 'project,design', '13:00', '17:00', 'pending', 'openai'),
+        (2, 'Evening Run', 'Evening run in the park', '${tomorrowDate}', 'hobby', 'medium', 'run,health', '18:00', '19:00', 'pending', 'openai'),
+        (2, 'Dinner', 'Dinner with family', '${tomorrowDate}', 'break', 'medium', 'dinner,family', '20:00', '21:00', 'pending', 'openai'),
+        (2, 'Painting', 'Work on painting', '${tomorrowDate}', 'hobby', 'low', 'painting,relax', '21:00', '22:00', 'pending', 'openai')
     `, (err) => {
         if (err) {
             console.error("Error inserting into Schedules table:", err.message);
