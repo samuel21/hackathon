@@ -8,6 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const localizer = momentLocalizer(moment);
 
+const CalendarWrapper = styled.div`
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+`;
+
 
 const StyledButton = styled(Button)`
   background-color: #3498db;
@@ -67,7 +76,7 @@ const MyCalendar = () => {
 
   // Custom event style handler
   const eventStyleGetter = (event) => {
-    const backgroundColor = event.type === "meeting" ? "#3498db" : "#2ecc76";
+    const backgroundColor = event.type === "meeting" ? "#57319d" : "#20764c";
     return {
       style: {
         backgroundColor,
@@ -80,20 +89,25 @@ const MyCalendar = () => {
 
   return (
     <div>
+        <CalendarWrapper>
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 500 }}
-          defaultView="week"
+          defaultView="day"
           views={["month", "week", "day"]}
           step={60}
           showMultiDayTimes
           selectable
           onSelectEvent={handleShow}
           eventPropGetter={eventStyleGetter}
+          components={{
+            event: ({ event }) => <span>{event.title}</span>, // Only show the event title
+          }}
         />
+        </CalendarWrapper>
         
       {/* Modal Popup */}
       <Modal show={show} onHide={handleClose}>
@@ -109,9 +123,9 @@ const MyCalendar = () => {
               <Form.Label>RSVP to this event</Form.Label>
               <Form.Control as="select" value={rsvp} onChange={handleRsvpChange}>
                 <option value="">Select an option</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="Maybe">Maybe</option>
+                <option value="Accepted">Accept</option>
+                <option value="Declined">Decline</option>
+                <option value="Tentative">Tentative</option>
               </Form.Control>
             </Form.Group>
           </Form>

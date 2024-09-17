@@ -4,6 +4,7 @@ import Navbar from './components/navbar';
 import Questionnaire from './components/questionnarie';
 import React, { useRef } from 'react';// Import the Navbar component
 import MyCalendar from './components/calendar';
+import CheckInTodoList from './components/checkin';
 
 function App() {
   const questionnaireRef = useRef(null);
@@ -30,6 +31,7 @@ function App() {
         </section>
       </div>
       <MyCalendar/>
+      <CheckInTodoList/>
     </div>
   );
 }
