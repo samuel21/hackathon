@@ -6,6 +6,7 @@ import React, { useRef } from 'react';// Import the Navbar component
 import MyCalendar from './components/calendar';
 import CheckInApp from './components/checkin';
 import SummaryComponent from './components/summary';
+import TomorrowScheduleComponent from './components/tomorrow';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
       {/* <Modal> */}
       <CheckInApp/>
       <SummaryComponent/>
+      <TomorrowScheduleComponent/>
       {/* </Modal> */}
     </div>
   );

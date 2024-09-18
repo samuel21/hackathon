@@ -110,18 +110,18 @@ const SummaryComponent = () => {
 
   const scheduleNotification = () => {
     const now = new Date();
-    const sixPM = new Date();
-    sixPM.setHours(18, 0, 0, 0); // 6 PM
+    const lastMeetingTime = new Date();
+    lastMeetingTime.setHours(18, 0, 0, 0); // 6 PM
 
     // Calculate the time remaining until 6 PM
-    const timeUntilSixPM = sixPM - now;
+    const timeUntilLastMeet = lastMeetingTime - now;
     
     // If 6 PM is already passed for today, schedule it for tomorrow
-    if (timeUntilSixPM < 0) {
-      sixPM.setDate(sixPM.getDate() + 1);
+    if (timeUntilLastMeet < 0) {
+      lastMeetingTime.setDate(lastMeetingTime.getDate() + 1);
     }
 
-    const timeLeft = sixPM.getTime() - now.getTime();
+    const timeLeft = lastMeetingTime.getTime() - now.getTime();
 
     // Schedule notification at 6 PM
     setTimeout(() => {
