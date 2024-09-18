@@ -79,7 +79,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
       const timer = setTimeout(() => {
         if (Notification.permission === "granted") {
           new Notification("Here's your Schedule for Tomorrow", {
-            body: "Click here to view your draft schedule for tomorrow!",
+            body: "Click here to view your schedule for tomorrow!",
             icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
           }).onclick = () => {
             onClose();
@@ -88,7 +88,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
           Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
               new Notification("Here's your Schedule for Tomorrow", {
-                body: "Click here to view your draft schedule for tomorrow!",
+                body: "Click here to view your schedule for tomorrow!",
                 icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
               }).onclick = () => {
                 onClose();
