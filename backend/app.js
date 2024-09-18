@@ -36,7 +36,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
           event.start_time,
           event.end_time,
           event.status,
-          event.
+          'ics'
         ];
 
         db.run(query, params, function (err) {
