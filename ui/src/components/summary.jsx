@@ -12,8 +12,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid
+  Grid,
+  ListItemIcon
 } from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // Dummy task data
 const initialTasks = [
@@ -89,13 +91,16 @@ const SummaryComponent = () => {
       return acc;
     }, {});
     setMeetingsAttended(meetingsByCategory);
+
+    // Schedule notification for 6 PM
+    scheduleNotification();
   }, []);
 
   const renderProgress = (category) => {
     const goal = goals[category];
     const progress = (goal.stepsCompleted / goal.totalSteps) * 100;
     return (
-      <Box sx={{ width: '100%', mt: 2 }}>
+      <Box sx={{ width: "100%", mt: 2 }}>
         <Typography variant="body2">{category} Goals</Typography>
         <LinearProgress variant="determinate" value={progress} color="success" />
         <Typography variant="body2">{`${goal.stepsCompleted}/${goal.totalSteps} steps completed`}</Typography>
@@ -103,7 +108,46 @@ const SummaryComponent = () => {
     );
   };
 
-  // Open the modal
+  const scheduleNotification = () => {
+    const now = new Date();
+    const sixPM = new Date();
+    sixPM.setHours(18, 0, 0, 0); // 6 PM
+
+    // Calculate the time remaining until 6 PM
+    const timeUntilSixPM = sixPM - now;
+    
+    // If 6 PM is already passed for today, schedule it for tomorrow
+    if (timeUntilSixPM < 0) {
+      sixPM.setDate(sixPM.getDate() + 1);
+    }
+
+    const timeLeft = sixPM.getTime() - now.getTime();
+
+    // Schedule notification at 6 PM
+    setTimeout(() => {
+      sendNotification();
+    }, timeLeft);
+  };
+
+  const sendNotification = () => {
+    if (Notification.permission === "granted") {
+      const notification = new Notification("It's 6 PM! Here's your task summary.");
+      notification.onclick = () => {
+        handleClickOpen();// Open the modal when notification is clicked
+      };
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notification = new Notification("It's 6 PM! Here's your task summary.");
+          notification.onclick = () => {
+            setOpen(true); // Open the modal when notification is clicked
+          };
+        }
+      });
+    }
+  };
+
+  // Open the modal manually (if needed)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -115,10 +159,7 @@ const SummaryComponent = () => {
 
   return (
     <div>
-      {/* Button to trigger the modal */}
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        Open Summary
-      </Button>
+      {/* Button to trigger the modal manually */}
 
       {/* Modal Dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md">
@@ -132,13 +173,21 @@ const SummaryComponent = () => {
 
                   {/* Completed tasks */}
                   <Box>
-                    <Typography variant="body1" sx={{ mt: 2 }}>Tasks Completed</Typography>
+                    <Typography variant="body1" sx={{ mt: 2 }}>
+                      Tasks Completed
+                    </Typography>
                     <List>
-                      {completedTasks.filter((task) => task.category === category).map((task, index) => (
-                        <ListItem key={index}>
-                          <ListItemText primary={task.name} secondary={`Duration: ${task.duration} mins`} />
-                        </ListItem>
-                      ))}
+                      {completedTasks
+                        .filter((task) => task.category === category)
+                        .map((task, index) => (
+                          <ListItem key={index}>
+                            <ListItemIcon><CheckCircleIcon color="success"/></ListItemIcon>
+                            <ListItemText
+                              primary={task.name}
+                              secondary={`Duration: ${task.duration} mins`}
+                            />
+                          </ListItem>
+                        ))}
                     </List>
                   </Box>
 
@@ -158,7 +207,7 @@ const SummaryComponent = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="success">
             Close
           </Button>
         </DialogActions>
