@@ -115,6 +115,8 @@ async function main() {
     // Generate query on basis of the data fetched from database
     let query = await generateQuery(user_info, freeSlots, tasks, checkIns);
 
+    console.log("Generated query:", query);
+
     // You will need to set these environment variables or edit the following values
     const endpoint = process.env["AZURE_OPENAI_ENDPOINT"];
     const apiKey = process.env["AZURE_OPENAI_API_KEY"];
