@@ -8,7 +8,8 @@ async function main() {
   const endpoint = process.env["AZURE_OPENAI_ENDPOINT"];
   const apiKey = process.env["AZURE_OPENAI_API_KEY"];
   const apiVersion = "2023-03-15-preview";
-  const deployment = "gpt-35-turbo"; // This must match your deployment name
+//  const deployment = "gpt-35-turbo"; // This must match your deployment name
+  const deployment = "gpt-4o"; // This must match your deployment name
 
   const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 
@@ -18,7 +19,7 @@ async function main() {
       { role: "user", content: "Male, 28, software engineer at Microsoft in Nagpur, India. Single, lives with family. Priorities: health, family, guitar. Work hours: 10am-7pm, Mon-Fri. Generate a week's schedule to balance priorities." },    ],
     max_tokens: 4000,
     temperature: 0.7,
-    top_p: 0.95,
+    top_p: 0.05,
     frequency_penalty: 0,
     presence_penalty: 0,
     stop: null
