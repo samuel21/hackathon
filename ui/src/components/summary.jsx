@@ -68,7 +68,6 @@ const goals = {
 const SummaryComponent = () => {
   const [completedTasks, setCompletedTasks] = useState([]);
   const [timeFocused, setTimeFocused] = useState({});
-  const [meetingsAttended, setMeetingsAttended] = useState({});
   const [open, setOpen] = useState(false); // For modal state
 
   useEffect(() => {
@@ -84,16 +83,7 @@ const SummaryComponent = () => {
     }, {});
     setTimeFocused(timeByCategory);
 
-    // Filter meetings attended
-    const meetings = filteredCompletedTasks.filter((task) => task.isMeeting);
-    const meetingsByCategory = meetings.reduce((acc, task) => {
-      if (!acc[task.category]) acc[task.category] = [];
-      acc[task.category].push(task.name);
-      return acc;
-    }, {});
-    setMeetingsAttended(meetingsByCategory);
-
-    // Schedule notification for 6 PM
+    // Schedule notification for EOD
     scheduleNotification();
   }, []);
 
@@ -111,6 +101,8 @@ const SummaryComponent = () => {
 
   const scheduleNotification = () => {
     const now = new Date();
+
+    //We can get last meeting hours from data here
     const lastMeetingTime = new Date();
     lastMeetingTime.setHours(18, 0, 0, 0); // 6 PM
 

@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/navbar';
 import Questionnaire from './components/questionnarie';
-import React, { useRef } from 'react';// Import the Navbar component
+import React from 'react';// Import the Navbar component
 import MyCalendar from './components/calendar';
 import CheckInApp from './components/checkin';
 import SummaryComponent from './components/summary';

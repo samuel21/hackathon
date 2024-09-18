@@ -9,8 +9,6 @@ import {
   ListItemText,
   Divider,
   Box,
-  Avatar,
-  CardHeader,
   Button,
   ListItemIcon,
   Dialog,
@@ -63,9 +61,6 @@ const getRandomQuote = () => {
 
 const TomorrowScheduleComponent = ({ onopen, onClose }) => {
   const [motivationalQuote, setMotivationalQuote] = useState("");
-//   const [open, setOpen] = useState(onopen); // For modal state
-  // If onclick is true, show modal immediately
-  // If onclick is false, show modal with present useEffect
   useEffect(() => {
     // Set random motivational quote on component mount
     setMotivationalQuote(getRandomQuote());
