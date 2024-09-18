@@ -2,13 +2,15 @@ import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/navbar';
 import Questionnaire from './components/questionnarie';
-import React from 'react';// Import the Navbar component
+import React, { useState } from 'react';// Import the Navbar component
 import MyCalendar from './components/calendar';
 import CheckInApp from './components/checkin';
 import SummaryComponent from './components/summary';
 import TomorrowScheduleComponent from './components/tomorrow';
+import FocusHoursComponent from './components/focushours';
 
 function App() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div className="App">
       <Navbar /> 
@@ -37,7 +39,8 @@ function App() {
       {/* <Modal> */}
       <CheckInApp/>
       <SummaryComponent/>
-      <TomorrowScheduleComponent/>
+      <TomorrowScheduleComponent onopen={openModal} onClose={()=>{setOpenModal(false)}}/>
+      <FocusHoursComponent/>
       {/* </Modal> */}
     </div>
   );

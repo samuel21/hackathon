@@ -61,6 +61,7 @@ const getRandomQuote = () => {
 
 const TomorrowScheduleComponent = ({ onopen, onClose }) => {
   const [motivationalQuote, setMotivationalQuote] = useState("");
+  const [open, setOpen] = useState(onopen);
   useEffect(() => {
     // Set random motivational quote on component mount
     setMotivationalQuote(getRandomQuote());
@@ -77,7 +78,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
             body: "Click here to view your schedule for tomorrow!",
             icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
           }).onclick = () => {
-            onClose();
+            setOpen(true);
           };
         } else if (Notification.permission !== "denied") {
           Notification.requestPermission().then((permission) => {
@@ -86,7 +87,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
                 body: "Click here to view your schedule for tomorrow!",
                 icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
               }).onclick = () => {
-                onClose();
+                setOpen(true);
               };
             }
           });
@@ -99,7 +100,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
   return (
     <div id="tomorrow-modal">
       {/* Modal Dialog */}
-      <Dialog open={onopen} onClose={onClose} maxWidth="md" fullWidth>
+      <Dialog open={(onopen === undefined) ? open: onopen} onClose={(onClose === undefined) ? ()=>{setOpen(false)} : onClose} maxWidth="md" fullWidth>
         <DialogTitle><TodayIcon/> How's Tomorrow?</DialogTitle>
         <DialogContent dividers>
               <Grid container spacing={3}>
@@ -189,7 +190,7 @@ const TomorrowScheduleComponent = ({ onopen, onClose }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onClose === undefined ? ()=>{setOpen(false);} : onClose} color="primary">
             Close
           </Button>
         </DialogActions>
