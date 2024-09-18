@@ -1,4 +1,4 @@
-# Hackathon
+# New generation smart calendar
 
 For backend code:
 
