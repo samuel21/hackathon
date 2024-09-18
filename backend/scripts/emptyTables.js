@@ -1,13 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 
-// Connect to the SQLite database
-const db = new sqlite3.Database('HackScheduler.db', (err) => {
+// Connect to the SQLite database (or create it if it doesn't exist)
+const db = new sqlite3.Database('../HackScheduler.db', (err) => {
     if (err) {
-        console.error('Error opening database:', err.message);
+      console.error('Error opening database:', err.message);
     } else {
-        console.log('Connected to the SQLite database.');
+      console.log('Connected to the SQLite database.');
     }
 });
+
 
 // Clear data from all tables and reset auto-increment counters
 db.serialize(() => {
@@ -17,15 +18,6 @@ db.serialize(() => {
             console.error("Error clearing UserCheckIns table:", err.message);
         } else {
             console.log("UserCheckIns table cleared successfully");
-        }
-    });
-
-    // Clear data from Hobbies table
-    db.run(`DELETE FROM Hobbies`, (err) => {
-        if (err) {
-            console.error("Error clearing Hobbies table:", err.message);
-        } else {
-            console.log("Hobbies table cleared successfully");
         }
     });
 
@@ -66,19 +58,11 @@ db.serialize(() => {
     });
 
     // Reset auto-increment counters
-    db.run(`DELETE FROM sqlite_sequence WHERE name='UserCheckIns'`, (err) => {
+    db.run(`DELETE FROM sqlite_sequence WHERE name='UserWeeklyCheckIns'`, (err) => {
         if (err) {
-            console.error("Error resetting auto-increment counter for UserCheckIns table:", err.message);
+            console.error("Error resetting auto-increment counter for UserWeeklyCheckIns table:", err.message);
         } else {
-            console.log("Auto-increment counter for UserCheckIns table reset successfully");
-        }
-    });
-
-    db.run(`DELETE FROM sqlite_sequence WHERE name='Hobbies'`, (err) => {
-        if (err) {
-            console.error("Error resetting auto-increment counter for Hobbies table:", err.message);
-        } else {
-            console.log("Auto-increment counter for Hobbies table reset successfully");
+            console.log("Auto-increment counter for UserWeeklyCheckIns table reset successfully");
         }
     });
 
