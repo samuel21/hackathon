@@ -16,6 +16,7 @@ import {
   ListItemIcon
 } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import TomorrowScheduleComponent from "./tomorrow";
 
 // Dummy task data
 const initialTasks = [
@@ -157,6 +158,13 @@ const SummaryComponent = () => {
     setOpen(false);
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  // Function to open the modal
+  const openTomorrowSchedule = () => {
+    setOpenModal(true);
+  };
+
   return (
     <div>
       {/* Button to trigger the modal manually */}
@@ -207,11 +215,16 @@ const SummaryComponent = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose} color="success">
+          <Button onClick={openTomorrowSchedule} color="success">
+            Tomorrow's Schedule
+          </Button>
+          <TomorrowScheduleComponent onopen={openModal} onClose={() => setOpenModal(false)} />
+          <Button onClick={handleClose} color="error">
             Close
           </Button>
         </DialogActions>
       </Dialog>
+      <div id="tomorrow-modal"></div>
     </div>
   );
 };

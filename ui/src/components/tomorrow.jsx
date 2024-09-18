@@ -61,15 +61,14 @@ const getRandomQuote = () => {
   return motivationalQuotes[randomIndex];
 };
 
-const TomorrowScheduleComponent = () => {
+const TomorrowScheduleComponent = ({ onopen, onClose }) => {
   const [motivationalQuote, setMotivationalQuote] = useState("");
-  const [open, setOpen] = useState(false); // For modal state
-
+//   const [open, setOpen] = useState(onopen); // For modal state
+  // If onclick is true, show modal immediately
+  // If onclick is false, show modal with present useEffect
   useEffect(() => {
     // Set random motivational quote on component mount
     setMotivationalQuote(getRandomQuote());
-
-    // Schedule notification for the end of the day (after the last meeting)
     const lastMeetingTime = new Date();
     lastMeetingTime.setHours(16, 0, 0); // Set to 4:00 PM
 
@@ -77,13 +76,13 @@ const TomorrowScheduleComponent = () => {
     const timeUntilNotification = lastMeetingTime - now;
 
     if (timeUntilNotification > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         if (Notification.permission === "granted") {
           new Notification("Here's your Schedule for Tomorrow", {
             body: "Click here to view your draft schedule for tomorrow!",
             icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
           }).onclick = () => {
-            setOpen(true);
+            onClose();
           };
         } else if (Notification.permission !== "denied") {
           Notification.requestPermission().then((permission) => {
@@ -92,19 +91,20 @@ const TomorrowScheduleComponent = () => {
                 body: "Click here to view your draft schedule for tomorrow!",
                 icon: "https://via.placeholder.com/150", // Add your own icon URL if needed
               }).onclick = () => {
-                setOpen(true);
+                onClose();
               };
             }
           });
         }
       }, timeUntilNotification);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [onClose]);
 
   return (
-    <div>
+    <div id="tomorrow-modal">
       {/* Modal Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+      <Dialog open={onopen} onClose={onClose} maxWidth="md" fullWidth>
         <DialogTitle><TodayIcon/> How's Tomorrow?</DialogTitle>
         <DialogContent dividers>
               <Grid container spacing={3}>
@@ -194,7 +194,7 @@ const TomorrowScheduleComponent = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">
+          <Button onClick={onClose} color="primary">
             Close
           </Button>
         </DialogActions>
