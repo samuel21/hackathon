@@ -99,6 +99,25 @@ db.serialize(() => {
             }
         });
 
+    // Create UserTodo table
+    db.run(`
+        CREATE TABLE IF NOT EXISTS UserTodo (
+            todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            task_name TEXT NOT NULL,
+            due_date TEXT,  -- Due date of the task (stored as TEXT in ISO format)
+            category TEXT,  -- Category of the task
+            priority TEXT,  -- Task priority
+            recurrence TEXT,  -- Recurrence pattern
+            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+        )`, (err) => {
+            if (err) {
+                console.error("Error creating UserTodo table:", err.message);
+            } else {
+                console.log("UserTodo table created successfully");
+            }
+        });
+
     // Close the database
     db.close((err) => {
         if (err) {

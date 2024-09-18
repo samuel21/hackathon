@@ -42,18 +42,11 @@ db.serialize(() => {
                 } else {
                     console.log("User preferences inserted successfully");
 
-                    // Insert schedules
+                    // Insert work-related schedules
                     const schedules = [
-                        ['Morning Workout', 'Exercise routine', tomorrowDate, 'hobby', 'high', 'fitness', '07:00', '08:00', 'completed', 'openai'],
-                        ['Breakfast', 'Healthy breakfast', tomorrowDate, 'break', 'medium', 'meal', '08:00', '08:30', 'completed', 'openai'],
                         ['Work on Project A', 'Development tasks', tomorrowDate, 'work', 'high', 'project', '09:00', '12:00', 'pending', 'openai'],
-                        ['Lunch Break', 'Lunch with colleagues', tomorrowDate, 'break', 'medium', 'meal', '12:00', '13:00', 'pending', 'openai'],
                         ['Team Meeting', 'Discuss project progress', tomorrowDate, 'work', 'high', 'meeting', '13:00', '14:00', 'pending', 'openai'],
-                        ['Work on Project B', 'Development tasks', tomorrowDate, 'work', 'medium', 'project', '14:00', '17:00', 'pending', 'openai'],
-                        ['Evening Walk', 'Relaxing walk in the park', tomorrowDate, 'hobby', 'low', 'fitness', '17:00', '18:00', 'pending', 'openai'],
-                        ['Dinner', 'Dinner with family', tomorrowDate, 'break', 'medium', 'meal', '18:00', '19:00', 'pending', 'openai'],
-                        ['Reading', 'Read a book', tomorrowDate, 'hobby', 'low', 'leisure', '19:00', '20:00', 'pending', 'openai'],
-                        ['Sleep', 'Night sleep', tomorrowDate, 'sleep', 'high', 'rest', '23:00', '07:00', 'pending', 'openai']
+                        ['Work on Project B', 'Development tasks', tomorrowDate, 'work', 'medium', 'project', '14:00', '17:00', 'pending', 'openai']
                     ];
 
                     const stmt = db.prepare(`
@@ -85,12 +78,42 @@ db.serialize(() => {
                                 } else {
                                     console.log("User weekly check-ins inserted successfully");
 
-                                    // Close the database
-                                    db.close((err) => {
+                                    // Insert meaningful dummy data into UserTodo table
+                                    const todos = [
+                                        [userId, 'Morning Exercise', tomorrowDate, 'health', 'high', 'daily'],
+                                        [userId, 'Team Meeting', tomorrowDate, 'work', 'medium', 'weekly'],
+                                        [userId, 'Grocery Shopping', tomorrowDate, 'personal', 'low', 'weekly'],
+                                        [userId, 'Read a Book', tomorrowDate, 'hobby', 'medium', 'daily'],
+                                        [userId, 'Doctor Appointment', tomorrowDate, 'health', 'high', 'none']
+                                    ];
+
+                                    const todoStmt = db.prepare(`
+                                        INSERT INTO UserTodo (user_id, task_name, due_date, category, priority, recurrence)
+                                        VALUES (?, ?, ?, ?, ?, ?)
+                                    `);
+
+                                    for (const todo of todos) {
+                                        todoStmt.run(todo, (err) => {
+                                            if (err) {
+                                                console.error("Error inserting todo:", err.message);
+                                            }
+                                        });
+                                    }
+
+                                    todoStmt.finalize((err) => {
                                         if (err) {
-                                            console.error('Error closing the database:', err.message);
+                                            console.error("Error finalizing todo statement:", err.message);
                                         } else {
-                                            console.log('Database closed successfully');
+                                            console.log("UserTodo data inserted successfully");
+
+                                            // Close the database
+                                            db.close((err) => {
+                                                if (err) {
+                                                    console.error('Error closing the database:', err.message);
+                                                } else {
+                                                    console.log('Database closed successfully');
+                                                }
+                                            });
                                         }
                                     });
                                 }
