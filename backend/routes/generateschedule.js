@@ -7,8 +7,8 @@ const db = new sqlite3.Database("HackScheduler.db");
 
 dotenv.config();
 
-async function main() {
-  const user_id = 1;
+router.get("/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
   let user_info = {};
 
   try {
@@ -135,7 +135,7 @@ async function main() {
         {
           role: "system",
           content:
-            "You are an AI assistant that only responds with json output and helps manage daily and weekly schedules. Ensure work, personal tasks, health, and family time are balanced. Prioritize tasks and include breaks. Respond only in minified JSON with date, start time, end time, task name, and priority.",
+            "You are an AI assistant that only responds with json output and helps manage daily and weekly schedules. Ensure work, personal tasks, health, and family time are balanced. Prioritize tasks and include breaks. Respond only in minified JSON with date, start time, end time, task name, and priority. Do not wrap the response with markdown or code blocks.",
         },
         { role: "user", content: query },
       ],
@@ -147,11 +147,9 @@ async function main() {
       stop: null,
     });
 
-    for (const choice of result.choices) {
-      console.log(choice.message.content);
-    }
+    res.status(200).send(JSON.parse(result.choices[0].message.content));
   } catch (err) {
-    console.error("Error:", err.message);
+    res.status(500).send(err);
   } finally {
     // Close the database
     db.close((err) => {
@@ -162,10 +160,6 @@ async function main() {
       }
     });
   }
-}
-
-main().catch((err) => {
-  console.error("The sample encountered an error:", err);
 });
 
 const generateQuery = async (user_info, freeSlots, tasks, checkIns) => {
@@ -218,4 +212,4 @@ const generateQuery = async (user_info, freeSlots, tasks, checkIns) => {
   return result.choices[0].message.content;
 };
 
-module.exports = { main };
+module.exports = router;
