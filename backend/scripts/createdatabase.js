@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Connect to the SQLite database (or create it if it doesn't exist)
-const db = new sqlite3.Database('./backend/HackScheduler.db', (err) => {
+const db = new sqlite3.Database('../HackScheduler.db', (err) => {
     if (err) {
       console.error('Error opening database:', err.message);
     } else {
@@ -56,25 +56,6 @@ db.serialize(() => {
             }
         });
 
-    // Create WorkLearningPlans table
-    db.run(`
-        CREATE TABLE IF NOT EXISTS WorkLearningPlans (
-            plan_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            task_name TEXT NOT NULL,
-            task_type TEXT CHECK(task_type IN ('work', 'learning')) NOT NULL,
-            priority TEXT DEFAULT 'medium' CHECK(priority IN ('low', 'medium', 'high')),
-            duration INTEGER,  -- in minutes
-            due_date TEXT,  -- Using TEXT to store DATE values in ISO format (YYYY-MM-DD)
-            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating WorkLearningPlans table:", err.message);
-            } else {
-                console.log("WorkLearningPlans table created successfully");
-            }
-        });
-
     // Create Schedules table
     db.run(`
         CREATE TABLE IF NOT EXISTS Schedules (
@@ -99,25 +80,9 @@ db.serialize(() => {
             }
         });
 
-    // Create Hobbies table
+    // Create UserWeeklyCheckIns table
     db.run(`
-        CREATE TABLE IF NOT EXISTS Hobbies (
-            hobby_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            hobby_name TEXT NOT NULL,
-            preferred_duration INTEGER,  -- in minutes per day
-            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating Hobbies table:", err.message);
-            } else {
-                console.log("Hobbies table created successfully");
-            }
-        });
-
-    // Create UserCheckIns table
-    db.run(`
-        CREATE TABLE IF NOT EXISTS UserCheckIns (
+        CREATE TABLE IF NOT EXISTS UserWeeklyCheckIns (
             checkin_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             checkin_type TEXT CHECK(checkin_type IN ('weekly', 'monthly')) NOT NULL,
@@ -128,9 +93,9 @@ db.serialize(() => {
             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
         )`, (err) => {
             if (err) {
-                console.error("Error creating UserCheckIns table:", err.message);
+                console.error("Error creating UserWeeklyCheckIns table:", err.message);
             } else {
-                console.log("UserCheckIns table created successfully");
+                console.log("UserWeeklyCheckIns table created successfully");
             }
         });
 
