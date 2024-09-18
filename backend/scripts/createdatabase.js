@@ -1,18 +1,19 @@
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require("sqlite3").verbose();
 
 // Connect to the SQLite database (or create it if it doesn't exist)
-const db = new sqlite3.Database('../HackScheduler.db', (err) => {
-    if (err) {
-      console.error('Error opening database:', err.message);
-    } else {
-      console.log('Connected to the SQLite database.');
-    }
+const db = new sqlite3.Database("./HackScheduler.db", (err) => {
+  if (err) {
+    console.error("Error opening database:", err.message);
+  } else {
+    console.log("Connected to the SQLite database.");
+  }
 });
 
 // Create tables
 db.serialize(() => {
-    // Create Users table
-    db.run(`
+  // Create Users table
+  db.run(
+    `
         CREATE TABLE IF NOT EXISTS Users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
@@ -26,16 +27,19 @@ db.serialize(() => {
             location TEXT,
             role TEXT DEFAULT 'user' CHECK(role IN ('admin', 'user')),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating Users table:", err.message);
-            } else {
-                console.log("Users table created successfully");
-            }
-        });
+        )`,
+    (err) => {
+      if (err) {
+        console.error("Error creating Users table:", err.message);
+      } else {
+        console.log("Users table created successfully");
+      }
+    }
+  );
 
-    // Create Preferences table
-    db.run(`
+  // Create Preferences table
+  db.run(
+    `
         CREATE TABLE IF NOT EXISTS UserPreferences (
             preference_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
@@ -48,16 +52,19 @@ db.serialize(() => {
             sleep_schedule_start TEXT,  -- Using TEXT to store TIME values
             sleep_schedule_end TEXT,    -- Using TEXT to store TIME values
             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating UserPreferences table:", err.message);
-            } else {
-                console.log("UserPreferences table created successfully");
-            }
-        });
+        )`,
+    (err) => {
+      if (err) {
+        console.error("Error creating UserPreferences table:", err.message);
+      } else {
+        console.log("UserPreferences table created successfully");
+      }
+    }
+  );
 
-    // Create Schedules table
-    db.run(`
+  // Create Schedules table
+  db.run(
+    `
         CREATE TABLE IF NOT EXISTS Schedules (
         schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
@@ -72,16 +79,19 @@ db.serialize(() => {
         status TEXT CHECK(status IN ('completed', 'partial', 'pending')) DEFAULT 'pending',  -- Task status
         source TEXT CHECK(source IN ('openai', 'ics')) DEFAULT 'openai',
         FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-    )`, (err) => {
-            if (err) {
-                console.error("Error creating Schedules table:", err.message);
-            } else {
-                console.log("Schedules table created successfully");
-            }
-        });
+    )`,
+    (err) => {
+      if (err) {
+        console.error("Error creating Schedules table:", err.message);
+      } else {
+        console.log("Schedules table created successfully");
+      }
+    }
+  );
 
-    // Create UserWeeklyCheckIns table
-    db.run(`
+  // Create UserWeeklyCheckIns table
+  db.run(
+    `
         CREATE TABLE IF NOT EXISTS UserWeeklyCheckIns (
             checkin_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
@@ -91,16 +101,19 @@ db.serialize(() => {
             family_plan TEXT,  -- User's family-related goals for the upcoming week/month
             checkin_date TEXT NOT NULL,  -- Using TEXT to store DATE values in ISO format (YYYY-MM-DD)
             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating UserWeeklyCheckIns table:", err.message);
-            } else {
-                console.log("UserWeeklyCheckIns table created successfully");
-            }
-        });
+        )`,
+    (err) => {
+      if (err) {
+        console.error("Error creating UserWeeklyCheckIns table:", err.message);
+      } else {
+        console.log("UserWeeklyCheckIns table created successfully");
+      }
+    }
+  );
 
-    // Create UserTodo table
-    db.run(`
+  // Create UserTodo table
+  db.run(
+    `
         CREATE TABLE IF NOT EXISTS UserTodo (
             todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
@@ -109,21 +122,24 @@ db.serialize(() => {
             category TEXT,  -- Category of the task
             priority TEXT,  -- Task priority
             recurrence TEXT,  -- Recurrence pattern
+            status TEXT CHECK(status IN ('completed', 'partial', 'pending')) DEFAULT 'pending',  -- Task status
             FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        )`, (err) => {
-            if (err) {
-                console.error("Error creating UserTodo table:", err.message);
-            } else {
-                console.log("UserTodo table created successfully");
-            }
-        });
+        )`,
+    (err) => {
+      if (err) {
+        console.error("Error creating UserTodo table:", err.message);
+      } else {
+        console.log("UserTodo table created successfully");
+      }
+    }
+  );
 
-    // Close the database
-    db.close((err) => {
-        if (err) {
-            console.error('Error closing the database:', err.message);
-        } else {
-            console.log('Database closed successfully');
-        }
-    });
+  // Close the database
+  db.close((err) => {
+    if (err) {
+      console.error("Error closing the database:", err.message);
+    } else {
+      console.log("Database closed successfully");
+    }
+  });
 });

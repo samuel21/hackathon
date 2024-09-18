@@ -67,7 +67,7 @@ const preferencesRoutes = require('./routes/preferences');  // Ensure correct pa
 const plansRoutes = require('./routes/plans');  // Ensure correct path
 const schedulesRoutes = require('./routes/schedules');  // Ensure correct path
 const hobbiesRoutes = require('./routes/hobbies');  // Ensure correct path
-const checkinsRoutes = require('./routes/checkins');  // Ensure correct path
+const checkinsRoutes = require('./routes/weeklycheckins');  // Ensure correct path
 
 // Use the routes as middleware
 app.use('/users', usersRoutes);
@@ -75,7 +75,7 @@ app.use('/preferences', preferencesRoutes);
 app.use('/plans', plansRoutes);
 app.use('/schedules', schedulesRoutes);
 app.use('/hobbies', hobbiesRoutes);
-app.use('/checkins', checkinsRoutes);
+app.use('/weeklycheckins', checkinsRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
