@@ -1,6 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
 
-// Get tomorrow's date
+// Get today's and tomorrow's dates
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
 const getTomorrowDate = () => {
   const today = new Date();
   const tomorrow = new Date(today);
@@ -8,6 +13,7 @@ const getTomorrowDate = () => {
   return tomorrow.toISOString().split("T")[0];
 };
 
+const todayDate = getTodayDate();
 const tomorrowDate = getTomorrowDate();
 
 // Connect to the SQLite database
@@ -46,8 +52,84 @@ db.serialize(() => {
             } else {
               console.log("User preferences inserted successfully");
 
-              // Insert work-related schedules
-              const schedules = [
+              // Insert schedules for today with varying status values
+              const todaySchedules = [
+                [
+                  "Work on Project A",
+                  "Development tasks",
+                  todayDate,
+                  "work",
+                  "high",
+                  "project",
+                  "09:00",
+                  "12:00",
+                  "completed",
+                  "openai",
+                ],
+                [
+                  "Team Meeting",
+                  "Discuss project progress",
+                  todayDate,
+                  "work",
+                  "high",
+                  "meeting",
+                  "13:00",
+                  "14:00",
+                  "partial",
+                  "openai",
+                ],
+                [
+                  "Work on Project B",
+                  "Development tasks",
+                  todayDate,
+                  "work",
+                  "medium",
+                  "project",
+                  "14:00",
+                  "17:00",
+                  "pending",
+                  "openai",
+                ],
+                [
+                  "Gym Workout",
+                  "Cardio and strength training",
+                  todayDate,
+                  "break",
+                  "high",
+                  "exercise",
+                  "07:00",
+                  "08:00",
+                  "completed",
+                  "openai",
+                ],
+                [
+                  "Family Dinner",
+                  "Dinner with family",
+                  todayDate,
+                  "break",
+                  "medium",
+                  "family",
+                  "19:00",
+                  "20:00",
+                  "pending",
+                  "openai",
+                ],
+                [
+                  "Read a Book",
+                  "Reading 'Clean Code'",
+                  todayDate,
+                  "hobby",
+                  "low",
+                  "reading",
+                  "20:00",
+                  "21:00",
+                  "partial",
+                  "openai",
+                ],
+              ];
+
+              // Insert schedules for tomorrow with status "pending"
+              const tomorrowSchedules = [
                 [
                   "Work on Project A",
                   "Development tasks",
@@ -91,10 +173,24 @@ db.serialize(() => {
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `);
 
-              for (const schedule of schedules) {
+              for (const schedule of todaySchedules) {
                 stmt.run([userId, ...schedule], (err) => {
                   if (err) {
-                    console.error("Error inserting schedule:", err.message);
+                    console.error(
+                      "Error inserting today's schedule:",
+                      err.message
+                    );
+                  }
+                });
+              }
+
+              for (const schedule of tomorrowSchedules) {
+                stmt.run([userId, ...schedule], (err) => {
+                  if (err) {
+                    console.error(
+                      "Error inserting tomorrow's schedule:",
+                      err.message
+                    );
                   }
                 });
               }
@@ -109,7 +205,7 @@ db.serialize(() => {
                   db.run(
                     `
                                 INSERT INTO UserWeeklyCheckIns (user_id, checkin_type, work_plan, health_plan, family_plan, checkin_date)
-                                VALUES (${userId}, 'weekly', 'Complete Project A tasks', 'Maintain workout routine', 'Spend quality time with family', '${tomorrowDate}')
+                                VALUES (${userId}, 'weekly', 'Complete Project A tasks', 'Maintain workout routine', 'Spend quality time with family', '${todayDate}')
                             `,
                     (err) => {
                       if (err) {
@@ -127,8 +223,8 @@ db.serialize(() => {
                           [
                             userId,
                             "Morning Exercise",
-                            tomorrowDate,
-                            "health",
+                            todayDate,
+                            "break",
                             "high",
                             "daily",
                             "pending",
@@ -136,7 +232,7 @@ db.serialize(() => {
                           [
                             userId,
                             "Team Meeting",
-                            tomorrowDate,
+                            todayDate,
                             "work",
                             "medium",
                             "weekly",
@@ -145,8 +241,8 @@ db.serialize(() => {
                           [
                             userId,
                             "Grocery Shopping",
-                            tomorrowDate,
-                            "personal",
+                            todayDate,
+                            "break",
                             "low",
                             "weekly",
                             "pending",
@@ -154,7 +250,7 @@ db.serialize(() => {
                           [
                             userId,
                             "Read a Book",
-                            tomorrowDate,
+                            todayDate,
                             "hobby",
                             "medium",
                             "daily",
@@ -163,8 +259,8 @@ db.serialize(() => {
                           [
                             userId,
                             "Doctor Appointment",
-                            tomorrowDate,
-                            "health",
+                            todayDate,
+                            "break",
                             "high",
                             "none",
                             "pending",

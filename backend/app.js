@@ -69,6 +69,7 @@ const schedulesRoutes = require("./routes/schedules"); // Ensure correct path
 const hobbiesRoutes = require("./routes/hobbies"); // Ensure correct path
 const checkinsRoutes = require("./routes/weeklycheckins"); // Ensure correct path
 const generatescheduleRoutes = require("./routes/generateschedule"); // Ensure correct path
+const generatesummaryRoutes = require("./routes/generatesummary"); // Ensure correct path
 
 // Use the routes as middleware
 app.use("/users", usersRoutes);
@@ -78,6 +79,7 @@ app.use("/schedules", schedulesRoutes);
 app.use("/hobbies", hobbiesRoutes);
 app.use("/weeklycheckins", checkinsRoutes);
 app.use("/generateschedule", generatescheduleRoutes);
+app.use("/generatesummary", generatesummaryRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
