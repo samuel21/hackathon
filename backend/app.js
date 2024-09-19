@@ -30,7 +30,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
           event.name,
           event.description,
           null, // Replace with actual due_date if needed
-          event.category,
+          'work',
           event.priority,
           event.labels,
           event.start_time,
