@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import { Button, Form, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 import './css/questionnaire.css';
 
-const BasicInfoForm = ({onChange}) => {
+const BasicInfoForm = ({ data, scrollTo }) => {
     const [formData, setFormData] = useState({
-        name: '',
-        gender: '',
-        age: '',
-        maritalStatus: '',
-        kids: '',
-        occupation: '',
-        location: ''
+        ...data
     });
 
     const handleChange = (e) => {
+        console.log('event at basic info', e.target);
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -21,13 +16,31 @@ const BasicInfoForm = ({onChange}) => {
         });
     };
 
+    useEffect(() => {
+        setFormData(data);
+    }, [data]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form Data Submitted: ', formData);
+        debugger;
+        Object.keys(formData).forEach(key => {
+            console.log('Form Data Submitted: ', key);
+            console.log('Form Data Submitted: ', formData[key]);
+            data[key] = formData[key];
+        });
+        console.log("Data ", data);
+        console.log("scrollTo ", scrollTo)
+        // scrollTo.current.scrollIntoView({ behavior: 'smooth' });
+        setFormData({
+            ...formData,
+            hideBasicInfo: !formData.hideBasicInfo,
+            hideGoalsForm: !formData.hideGoalsForm
+        });
+        data = formData;
     };
 
     return (
-        <Form onSubmit={handleSubmit} className='Form'>
+        <Form onSubmit={handleSubmit} className='Form' hidden={data.hideBasicInfo}>
             <Form.Group controlId='formGridName' className='group'>
                 <Form.Label>Name:</Form.Label>
                 <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -47,7 +60,7 @@ const BasicInfoForm = ({onChange}) => {
             </Form.Group>
             <Form.Group controlId="formGridMarried" className='group'>
                 <Form.Label>Married:</Form.Label>
-                <Form.Control as="select" name="married" value={formData.married} onChange={handleChange} required>
+                <Form.Control as="select" name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} required>
                     <option value="">Select</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -69,7 +82,7 @@ const BasicInfoForm = ({onChange}) => {
                 <Form.Label>Location:</Form.Label>
                 <Form.Control type="text" name="location" value={formData.location} onChange={handleChange} required />
             </Form.Group>
-            <button type="submit" className='Button'></button>
+            <button type="submit" className='Button' onClick={handleSubmit} >Save and Continue</button>
         </Form>
     );
 };
